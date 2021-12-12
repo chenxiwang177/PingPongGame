@@ -1,12 +1,12 @@
-import React, { Component } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import randomWords from "random-words";
-import MainMenu from "../../components/Settings_MainMenu/MainMenu";
 import SinglePlayerMenu from "../../components/Settings_MainMenu/SinglePlayerMenu";
 import MultiPlayerMenu from "../../components/Settings_MainMenu/MultiPlayerMenu";
 import Rooms from "../../components/Settings_Rooms/Rooms";
 import PrivateRoom from "../../components/Settings_PrivateRoom/PrivateRoom";
 import { ReactComponent as BackIcon } from "../../images/back.svg";
+import { useLocation } from "react-router-dom";
 
 const LobbyWrapper = styled.div`
   background: #1e1e1e;
@@ -102,29 +102,35 @@ const BackBtn = styled.button`
   }
 `;
 
-class GameSettings extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      rooms: [],
-    };
-  }
-
-  componentWillMount() {
-    const { pong } = this.props;
+const GameSettings = (props) => {
+  const [rooms, setRooms] = useState([]);
+  const {
+    pong,
+    playerName,
+    roomId,
+    handleError,
+    setOpponentName,
+    setRoomId,
+    setPlayerOne,
+    setGame,
+    opponentName,
+    setPlayerName,
+    leaveRoom,
+    isPlayerOne,
+    inLobby,
+    goToLobby,
+    setControls,
+    controls,
+  } = props;
+  useEffect(() => {
     pong.emit("getAllRooms");
-    pong.on("sendRoomsList", (data) => this.setState({ rooms: data }));
-    pong.on("goToGameRoom", (data) => this.handleGoToGameRoom(data));
-    pong.on("opponentInLobby", (data) => this.handleOpponentInLobby(data));
-    pong.on("gameReady", () => this.handleGameStart());
-  }
+    pong.on("sendRoomsList", (data) => setRooms(data));
+    pong.on("goToGameRoom", (data) => handleGoToGameRoom(data));
+    pong.on("opponentInLobby", (data) => handleOpponentInLobby(data));
+    pong.on("gameReady", () => handleGameStart());
+  }, []);
 
-  getAllRooms(rooms) {
-    this.setState({ rooms });
-  }
-
-  handleCreateRoom = () => {
-    const { pong, playerName } = this.props;
+  const handleCreateRoom = () => {
     const roomId = randomWords();
     pong.emit("createRoom", {
       roomName: roomId,
@@ -132,8 +138,7 @@ class GameSettings extends Component {
     });
   };
 
-  handleJoinRoom = (e) => {
-    const { pong, playerName, roomId, handleError } = this.props;
+  const handleJoinRoom = (e) => {
     if (roomId) return handleError("Firstly shut down your own room.");
     pong.emit("joinRoom", {
       roomName: e.target.dataset.name,
@@ -141,88 +146,82 @@ class GameSettings extends Component {
     });
   };
 
-  handleOpponentInLobby = ({ opponentName }) => {
-    const { setOpponentName } = this.props;
+  const handleOpponentInLobby = ({ opponentName }) => {
     setOpponentName(opponentName);
   };
 
-  handleGoToGameRoom = ({ roomId, opponentName, isPlayerOne }) => {
-    const { setOpponentName, setRoomId, setPlayerOne, pong } = this.props;
+  const handleGoToGameRoom = ({ roomId, opponentName, isPlayerOne }) => {
     setRoomId(roomId);
     setOpponentName(opponentName);
     setPlayerOne(isPlayerOne);
     pong.emit("getAllRooms");
   };
 
-  handleGetToGame = (isReady) => {
-    const { pong, roomId } = this.props;
+  const handleGetToGame = (isReady) => {
+    console.log(isReady);
     pong.emit("getToGame", {
       roomName: roomId,
       decision: isReady,
     });
   };
-
-  handleGameStart = () => {
-    const { setGame } = this.props;
+  const handleSingleGameGetToGame = () => {
     setGame();
   };
 
-  render() {
-    const {
-      playerName,
-      opponentName,
-      roomId,
-      setPlayerName,
-      pong,
-      leaveRoom,
-      isPlayerOne,
-      inLobby,
-      goToLobby,
-      setControls,
-      controls,
-    } = this.props;
-    const { rooms } = this.state;
-    return (
-      <>
-        {!inLobby && (
-          <MainMenu
-            playerName={playerName}
-            setPlayerName={setPlayerName}
-            goToLobby={() => goToLobby()}
-            setControls={(c) => setControls(c)}
-            controls={controls}
-          />
-        )}
-        {inLobby && (
-          <>
-            <LobbyWrapper>
-              <LobbyHeader>
-                <BackBtn onClick={() => goToLobby()}>
-                  <BackIcon />
-                </BackBtn>
-                <p>Welcome, {playerName}</p>
-              </LobbyHeader>
-              <LobbySettings>
-                <Rooms
-                  rooms={rooms}
-                  refreshRoomsList={() => pong.emit("getAllRooms")}
-                  joinRoom={(e) => this.handleJoinRoom(e)}
-                />
-                <PrivateRoom
-                  roomId={roomId}
-                  opponentName={opponentName}
-                  createRoom={() => this.handleCreateRoom()}
-                  leaveRoom={() => leaveRoom()}
-                  getToGame={(e) => this.handleGetToGame(e)}
-                  isPlayerOne={isPlayerOne}
-                />
-              </LobbySettings>
-            </LobbyWrapper>
-          </>
-        )}
-      </>
-    );
-  }
-}
+  const handleGameStart = () => {
+    setGame();
+  };
+  const location = useLocation().pathname;
+  return (
+    <>
+      {!inLobby && location === "/single" && (
+        <SinglePlayerMenu
+          playerName={playerName}
+          setPlayerName={setPlayerName}
+          goToLobby={() => goToLobby()}
+          setControls={(c) => setControls(c)}
+          controls={controls}
+          getToSingleGame={handleSingleGameGetToGame}
+        />
+      )}
+      {!inLobby && location === "/multi" && (
+        <MultiPlayerMenu
+          playerName={playerName}
+          setPlayerName={setPlayerName}
+          goToLobby={() => goToLobby()}
+          setControls={(c) => setControls(c)}
+          controls={controls}
+        />
+      )}
+      {inLobby && location === "/multi" && (
+        <>
+          <LobbyWrapper>
+            <LobbyHeader>
+              <BackBtn onClick={() => goToLobby()}>
+                <BackIcon />
+              </BackBtn>
+              <p>Welcome, {playerName}</p>
+            </LobbyHeader>
+            <LobbySettings>
+              <Rooms
+                rooms={rooms}
+                refreshRoomsList={() => pong.emit("getAllRooms")}
+                joinRoom={(e) => handleJoinRoom(e)}
+              />
+              <PrivateRoom
+                roomId={roomId}
+                opponentName={opponentName}
+                createRoom={() => handleCreateRoom()}
+                leaveRoom={() => leaveRoom()}
+                getToGame={(e) => handleGetToGame(e)}
+                isPlayerOne={isPlayerOne}
+              />
+            </LobbySettings>
+          </LobbyWrapper>
+        </>
+      )}
+    </>
+  );
+};
 
 export default GameSettings;

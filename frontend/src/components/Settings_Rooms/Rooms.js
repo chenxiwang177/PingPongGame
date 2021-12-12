@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
-import { ReactComponent as RefreshIcon } from '../../images/refresh.svg';
+import styled from "styled-components";
+import { ReactComponent as RefreshIcon } from "../../images/refresh.svg";
 
 const RoomsWrapper = styled.div`
   background: #fefefe;
@@ -92,12 +91,12 @@ const RoomPlayer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${props => (props.free ? '#ffed90' : '#fefefe')};
+  background: ${(props) => (props.free ? "#ffed90" : "#fefefe")};
 `;
 
 const JoinBtn = styled.button`
   text-transform: uppercase;
-  font-family: 'Concert One', cursive;
+  font-family: "Concert One", cursive;
   font-size: 0.9rem;
   width: 60%;
   background: #ed1c24;
@@ -127,7 +126,7 @@ const RefreshBtn = styled.button`
   align-items: center;
   font-size: 1rem;
   text-transform: uppercase;
-  font-family: 'Concert One', cursive;
+  font-family: "Concert One", cursive;
   padding: 10px 20px;
 
   &:hover {
@@ -192,20 +191,20 @@ const Rooms = ({ rooms, refreshRoomsList, joinRoom }) => (
         <RoomJoin />
       </RoomsListHeader>
       {rooms.length === 0 && <NoRoomsErr>no active rooms</NoRoomsErr>}
-      {rooms.map(room => (
+      {rooms.map((room) => (
         <Room key={room.id}>
           <RoomName>{room.id}</RoomName>
           <RoomPlayers>
             <RoomPlayer>{room.playerOne.name}</RoomPlayer>
             <RoomPlayer free={room.playerTwo.name === null && true}>
-              {room.playerTwo.name !== null ? room.playerTwo.name : 'Free'}
+              {room.playerTwo.name !== null ? room.playerTwo.name : "Free"}
             </RoomPlayer>
           </RoomPlayers>
           <RoomJoin>
             <JoinBtn
               type="button"
               data-name={room.id}
-              onClick={e => joinRoom(e)}
+              onClick={(e) => joinRoom(e)}
             >
               Join room
             </JoinBtn>

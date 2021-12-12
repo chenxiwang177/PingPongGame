@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { ReactComponent as ArrowUp } from '../../images/arrowUp.svg';
-import { ReactComponent as ArrowDown } from '../../images/arrowDown.svg';
+import { useState } from "react";
+import styled from "styled-components";
+import { ReactComponent as ArrowUp } from "../../images/arrowUp.svg";
+import { ReactComponent as ArrowDown } from "../../images/arrowDown.svg";
 
 const ArrowsWrapper = styled.div`
   position: absolute;
@@ -20,51 +20,42 @@ const ArrowsWrapper = styled.div`
   }
 `;
 
-class ControlsArrows extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dir: ''
-    };
-  }
-
-  onPress = dir => {
-    this.setState({ dir });
-    requestAnimationFrame(this.handleTouch.bind(this));
+const ControlsArrows = (props) => {
+  const [dir, setDir] = useState("");
+  var frameId;
+  const { handlePlayerMove } = props;
+  const onPress = (dir) => {
+    setDir(dir);
+    requestAnimationFrame(handleTouch);
   };
 
-  handleTouch = () => {
-    const { handlePlayerMove } = this.props;
-    const { dir } = this.state;
+  const handleTouch = () => {
     handlePlayerMove(dir);
-    this.frameId = window.requestAnimationFrame(this.handleTouch.bind(this));
+    frameId = window.requestAnimationFrame(handleTouch);
   };
 
-  onRelease = () => {
-    const { handlePlayerMove } = this.props;
-    this.setState({ dir: '' });
-    handlePlayerMove('');
-    window.cancelAnimationFrame(this.frameId);
+  const onRelease = () => {
+    setDir("");
+    handlePlayerMove("");
+    window.cancelAnimationFrame(frameId);
   };
 
-  render() {
-    return (
-      <ArrowsWrapper>
-        <ArrowUp
-          width="60px"
-          height="60px"
-          onTouchStart={() => this.onPress('ArrowUp')}
-          onTouchEnd={() => this.onRelease()}
-        />
-        <ArrowDown
-          width="60px"
-          height="60px"
-          onTouchStart={() => this.onPress('ArrowDown')}
-          onTouchEnd={() => this.onRelease()}
-        />
-      </ArrowsWrapper>
-    );
-  }
-}
+  return (
+    <ArrowsWrapper>
+      <ArrowUp
+        width="60px"
+        height="60px"
+        onTouchStart={() => onPress("ArrowUp")}
+        onTouchEnd={() => onRelease()}
+      />
+      <ArrowDown
+        width="60px"
+        height="60px"
+        onTouchStart={() => onPress("ArrowDown")}
+        onTouchEnd={() => onRelease()}
+      />
+    </ArrowsWrapper>
+  );
+};
 
 export default ControlsArrows;

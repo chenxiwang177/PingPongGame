@@ -1,7 +1,7 @@
-export default  {
-    knobX: 71,
-    knobY: 71,
-    svg:`
+export default {
+  knobX: 71,
+  knobY: 71,
+  svg: `
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="208px" height="208px" viewBox="0 0 208 208" version="1.1">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
     <desc>Created with Sketch.</desc>
@@ -63,5 +63,5 @@ export default  {
         </g>
     </g>
 </svg>
-`
-}
+`,
+};

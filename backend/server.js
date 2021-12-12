@@ -2,17 +2,18 @@ const express = require("express");
 const app = express();
 const socket = require("socket.io");
 const cors = require("cors");
+
 const UsersService = require("./server/UsersService");
+
 const usersService = new UsersService();
+
 app.use(express());
-
 const port = 8000;
-
 app.use(cors());
 
 var server = app.listen(
   port,
-  console.log(`Server is running on the port no: ${port} `.green)
+  console.log(`Server is running on the port ${port} `)
 );
 
 const io = socket(server);
@@ -41,11 +42,6 @@ io.on("connection", (socket) => {
 
   socket.on("leaveRoom", () => {
     const rooms = usersService.getRooms();
-    // async function leaveGame(roomName, socketId, msg) {
-    //   await socket.in(`room-${roomName}`).emit('playerLeft', msg);
-    //   await socket.leave(`room-${roomName}`);
-    //   await usersService.quitRoom(socketId);
-    // }
     function leaveGame(roomName, socketId, msg) {
       socket.in(`room-${roomName}`).emit("playerLeft", msg);
       socket.leave(`room-${roomName}`);
@@ -123,6 +119,14 @@ io.on("connection", (socket) => {
     socket.emit("gameElementsCreated", usersService.getGameElements(roomName));
   });
 
+  socket.on("createSingleGameElements", ({ w, h }) => {
+    usersService.createSingleGameElements(w, h);
+    socket.emit(
+      "singleGameElementsCreated",
+      usersService.getSingleGameElements()
+    );
+  });
+
   socket.on("clientMove", (clientMove) => {
     const rooms = usersService.getRooms();
     for (let i = 0; i < rooms.length; i++) {
@@ -132,6 +136,18 @@ io.on("connection", (socket) => {
         rooms[i].playerTwo.paddle.update(clientMove);
       }
     }
+  });
+
+  socket.on("singleGameClientMove", (clientMove) => {
+    const singleRoom = usersService.getSingleRoom();
+    singleRoom.playerTwo.paddle.update(clientMove);
+  });
+
+  socket.on("aiMove", () => {
+    const singleRoom = usersService.getSingleRoom();
+    const ballY = singleRoom.ball.y;
+    const ballDx = singleRoom.ball.dx;
+    if (ballDx === -2) singleRoom.playerOne.paddle.aiMove(ballY);
   });
 
   socket.on("requestSync", (roomName) => {
@@ -167,72 +183,30 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("disconnect", () => {
-    const rooms = usersService.getRooms();
-    async function leaveGame(roomName, socketId, msg) {
-      await socket.in(`room-${roomName}`).emit("playerLeft", msg);
-      await socket.leave(`room-${roomName}`);
-      await usersService.quitRoom(socketId);
-    }
-    let msg = "";
-    for (let i = 0; i < rooms.length; i++) {
-      if (rooms[i].playerOne && rooms[i].playerOne.id === socket.id) {
-        msg = `Your opponent ${rooms[i].playerOne.name} has closed the room.`;
-        leaveGame(rooms[i].id, socket.id, msg);
-      } else if (rooms[i].playerTwo && rooms[i].playerTwo.id === socket.id) {
-        msg = `Your opponent ${rooms[i].playerTwo.name} has left the room.`;
-        leaveGame(rooms[i].id, socket.id, msg);
+  socket.on("singleGameRequestSync", () => {
+    const singleRoom = usersService.getSingleRoom();
+    const updateScore = (isPlayerOneWon) => {
+      if (isPlayerOneWon) {
+        singleRoom.playerOne.paddle.updateScore();
+      } else {
+        singleRoom.playerTwo.paddle.updateScore();
       }
+      socket.emit("addAudio", "score");
+    };
+
+    const addBorderBounce = () => socket.emit("addAudio", "border");
+    const addPaddleBounce = () => socket.emit("addAudio", "paddle");
+
+    if (singleRoom.ball !== null) {
+      singleRoom.ball.update(
+        singleRoom.playerOne.paddle,
+        singleRoom.playerTwo.paddle,
+        (win) => updateScore(win),
+        () => addBorderBounce(),
+        () => addPaddleBounce()
+      );
+      const elementsPos = usersService.getSingleGameElementsPos();
+      socket.emit("syncMoves", elementsPos);
     }
   });
 });
-//initializing the socket io connection
-// io.on("connection", (socket) => {
-//   //for a new user joining the room
-//   socket.on("joinRoom", ({ username, roomname }) => {
-//     //* create user
-//     const p_user = join_User(socket.id, username, roomname);
-//     console.log(socket.id, "=id");
-//     socket.join(p_user.room);
-
-//     //display a welcome message to the user who have joined a room
-//     socket.emit("message", {
-//       userId: p_user.id,
-//       username: p_user.username,
-//       text: `Welcome ${p_user.username}`,
-//     });
-
-//     //displays a joined room message to all other room users except that particular user
-//     socket.broadcast.to(p_user.room).emit("message", {
-//       userId: p_user.id,
-//       username: p_user.username,
-//       text: `${p_user.username} has joined the chat`,
-//     });
-//   });
-
-//   //user sending message
-//   socket.on("chat", (text) => {
-//     //gets the room user and the message sent
-//     const p_user = get_Current_User(socket.id);
-
-//     io.to(p_user.room).emit("message", {
-//       userId: p_user.id,
-//       username: p_user.username,
-//       text: text,
-//     });
-//   });
-
-//   //when the user exits the room
-//   socket.on("disconnect", () => {
-//     //the user is deleted from array of users and a left room message displayed
-//     const p_user = user_Disconnect(socket.id);
-
-//     if (p_user) {
-//       io.to(p_user.room).emit("message", {
-//         userId: p_user.id,
-//         username: p_user.username,
-//         text: `${p_user.username} has left the room`,
-//       });
-//     }
-//   });
-// });

@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import kd from 'keydrown';
-import Ball from '../../components/Game_Ball/Ball';
-import Paddle from '../../components/Game_Paddle/Paddle';
-import Score from '../../components/Game_Score/Score';
-import GameInterface from '../../components/Game_Interface/GameInterface';
-import ControlsArrows from '../../components/Controls_Arrows/ControlsArrows';
-import ControlsKnob from '../../components/Controls_Knob/ControlsKnob';
-import { ReactComponent as Frame } from '../../images/pong-frame.svg';
-import ScoreAudio from '../../audio/score.mp3';
-import BorderAudio from '../../audio/border.mp3';
-import PaddleAudio from '../../audio/paddle.mp3';
+import React, { Component } from "react";
+import styled from "styled-components";
+import kd from "keydrown";
+import Ball from "../../components/Game_Ball/Ball";
+import Paddle from "../../components/Game_Paddle/Paddle";
+import Score from "../../components/Game_Score/Score";
+import GameInterface from "../../components/Game_Interface/GameInterface";
+import ControlsArrows from "../../components/Controls_Arrows/ControlsArrows";
+import ControlsKnob from "../../components/Controls_Knob/ControlsKnob";
+import { ReactComponent as Frame } from "../../images/pong-frame.svg";
+import ScoreAudio from "../../audio/score.mp3";
+import BorderAudio from "../../audio/border.mp3";
+import PaddleAudio from "../../audio/paddle.mp3";
 
 const GameContainer = styled.div`
   position: relative;
@@ -54,26 +54,27 @@ class GameArea extends Component {
     this.borderSound = React.createRef();
     this.paddleSound = React.createRef();
     this.scoreSound = React.createRef();
+    this.gameFinished = true;
     this.state = {
-      soundOn: true
+      soundOn: true,
     };
-  };
+  }
 
   componentDidMount() {
     const { pong } = this.props;
     const canvas = this.canvas.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     this.ctx = ctx;
     this.drawBoard(ctx);
     this.createGameElements();
     kd.run(() => kd.tick());
-    kd.UP.down(e => this.handlePlayerMoveByKeyboard(e));
-    kd.UP.up(() => this.handlePlayerMoveByKeyboard(''));
-    kd.DOWN.down(e => this.handlePlayerMoveByKeyboard(e));
-    kd.DOWN.up(() => this.handlePlayerMoveByKeyboard(''));
-    pong.on('syncMoves', data => this.syncGameElements(data));
-    pong.on('addAudio', type => this.addAudioEffect(type));
-  };
+    kd.UP.down((e) => this.handlePlayerMoveByKeyboard(e));
+    kd.UP.up(() => this.handlePlayerMoveByKeyboard(""));
+    kd.DOWN.down((e) => this.handlePlayerMoveByKeyboard(e));
+    kd.DOWN.up(() => this.handlePlayerMoveByKeyboard(""));
+    pong.on("syncMoves", (data) => this.syncGameElements(data));
+    pong.on("addAudio", (type) => this.addAudioEffect(type));
+  }
 
   componentWillUnmount() {
     kd.UP.unbindDown();
@@ -83,11 +84,11 @@ class GameArea extends Component {
     kd.stop();
   }
 
-  toggleAudio = isOn => {
+  toggleAudio = (isOn) => {
     this.setState({ soundOn: isOn });
   };
 
-  addAudioEffect = type => {
+  addAudioEffect = (type) => {
     if (
       this.paddleSound.current === null ||
       this.paddleSound.current === null ||
@@ -95,13 +96,13 @@ class GameArea extends Component {
     )
       return;
     switch (type) {
-      case 'border':
+      case "border":
         this.borderSound.current.play();
         break;
-      case 'score':
+      case "score":
         this.scoreSound.current.play();
         break;
-      case 'paddle':
+      case "paddle":
         this.paddleSound.current.play();
         break;
       default: // do nothing
@@ -111,8 +112,8 @@ class GameArea extends Component {
   createGameElements = () => {
     const { pong, roomId } = this.props;
     const { width, height } = this.canvas.current;
-    pong.emit('createGameElements', { w: width, h: height, roomName: roomId });
-    pong.on('gameElementsCreated', data => this.getGameElements(data));
+    pong.emit("createGameElements", { w: width, h: height, roomName: roomId });
+    pong.on("gameElementsCreated", (data) => this.getGameElements(data));
     this.loop();
   };
 
@@ -120,8 +121,8 @@ class GameArea extends Component {
     const { x, y, dx, dy, size, canvas } = ball;
     const { width, height } = canvas;
     const { isPlayerOne } = this.props;
-    this.clientScore = new Score(width / 6, height / 5, this.ctx);
-    this.enemyScore = new Score(width - width / 6, height / 5, this.ctx);
+    this.clientScore = new Score(width / 3, height / 5, this.ctx);
+    this.enemyScore = new Score(width - width / 3, height / 5, this.ctx);
     this.ball = new Ball(x, y, dx, dy, size, isPlayerOne, canvas, this.ctx);
     this.clientPaddle = new Paddle(30, height / 2, width, height, this.ctx);
     this.enemyPaddle = new Paddle(
@@ -135,7 +136,7 @@ class GameArea extends Component {
 
   drawBoard = () => {
     const { ctx, canvas } = this;
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, canvas.current.width, canvas.current.height);
     // line in the middle (net)
     ctx.beginPath();
@@ -144,25 +145,27 @@ class GameArea extends Component {
     ctx.lineWidth = 3;
     ctx.setLineDash([10, 5]);
     ctx.shadowBlur = 10;
-    ctx.shadowColor = '#FFFFFF';
-    ctx.strokeStyle = '#FEFEFE';
+    ctx.shadowColor = "#FFFFFF";
+    ctx.strokeStyle = "#FEFEFE";
     ctx.stroke();
   };
 
   loop = () => {
     const { roomId, pong } = this.props;
     if (this.canvas.current === null) return;
-    if (this.ball !== undefined &&
+    if (
+      this.ball !== undefined &&
       this.clientPaddle !== undefined &&
-      this.enemyPaddle !== undefined) {
-        this.drawBoard();
-        this.clientScore.draw();
-        this.enemyScore.draw();
-        this.ball.draw();
-        this.clientPaddle.draw();
-        this.enemyPaddle.draw();
-        pong.emit('requestSync', roomId);
-    };
+      this.enemyPaddle !== undefined
+    ) {
+      this.drawBoard();
+      this.clientScore.draw();
+      this.enemyScore.draw();
+      this.ball.draw();
+      this.clientPaddle.draw();
+      this.enemyPaddle.draw();
+      pong.emit("requestSync", roomId);
+    }
     requestAnimationFrame(this.loop.bind(this));
   };
 
@@ -172,49 +175,72 @@ class GameArea extends Component {
     leaveGame();
   };
 
-  syncGameElements = elements => {
+  syncGameElements = (elements) => {
     if (elements === null) return;
     const { ball, playerOnePaddle, playerTwoPaddle } = elements;
     const { isPlayerOne } = this.props;
     if (isPlayerOne) {
-      this.clientPaddle.sync(
+      if (playerOnePaddle.score >= 4 && this.gameFinished) {
+        alert("you win");
+        this.leaveGame();
+
+        this.gameFinished = false;
+      }
+      if (playerTwoPaddle.score >= 4 && this.gameFinished) {
+        alert("you lose");
+        this.leaveGame();
+        this.gameFinished = false;
+      }
+
+      this.clientPaddle?.sync(
         playerOnePaddle.y,
         playerOnePaddle.dx,
         playerOnePaddle.dy
       );
-      this.enemyPaddle.sync(
+      this.enemyPaddle?.sync(
         playerTwoPaddle.y,
         playerTwoPaddle.dx,
         playerTwoPaddle.dy
       );
-      this.clientScore.sync(playerOnePaddle.score);
-      this.enemyScore.sync(playerTwoPaddle.score);
+      this.clientScore?.sync(playerOnePaddle.score);
+      this.enemyScore?.sync(playerTwoPaddle.score);
     } else {
-      this.clientPaddle.sync(
+      if (playerOnePaddle.score >= 4 && this.gameFinished) {
+        alert("you lose");
+        this.leaveGame();
+        this.gameFinished = false;
+      }
+      if (playerTwoPaddle.score >= 4 && this.gameFinished) {
+        alert("you win");
+        this.leaveGame();
+        this.gameFinished = false;
+      }
+
+      this.clientPaddle?.sync(
         playerTwoPaddle.y,
         playerTwoPaddle.dx,
         playerTwoPaddle.dy
       );
-      this.enemyPaddle.sync(
+      this.enemyPaddle?.sync(
         playerOnePaddle.y,
         playerOnePaddle.dx,
         playerOnePaddle.dy
       );
-      this.clientScore.sync(playerTwoPaddle.score);
-      this.enemyScore.sync(playerOnePaddle.score);
+      this.clientScore?.sync(playerTwoPaddle.score);
+      this.enemyScore?.sync(playerOnePaddle.score);
     }
-    this.ball.sync(ball.x, ball.y, ball.dx, ball.dy);
+    this.ball?.sync(ball.x, ball.y, ball.dx, ball.dy);
   };
 
-  handlePlayerMoveByKeyboard = e => {
+  handlePlayerMoveByKeyboard = (e) => {
     const { pong } = this.props;
-    const key = e === '' ? '' : e.key;
-    pong.emit('clientMove', key);
+    const key = e === "" ? "" : e.key;
+    pong.emit("clientMove", key);
   };
 
-  handlePlayerMoveByTouch = move => {
+  handlePlayerMoveByTouch = (move) => {
     const { pong } = this.props;
-    pong.emit('clientMove', move);
+    pong.emit("clientMove", move);
   };
 
   render() {
@@ -229,7 +255,7 @@ class GameArea extends Component {
         <GameInterface
           leaveGame={() => this.leaveGame()}
           audioOn={soundOn}
-          toggleAudio={isOn => this.toggleAudio(isOn)}
+          toggleAudio={(isOn) => this.toggleAudio(isOn)}
         />
         <audio
           src={ScoreAudio}
@@ -249,13 +275,13 @@ class GameArea extends Component {
           type="audio/mpeg"
           ref={this.paddleSound}
         />
-        {controls === 'arrows' ? (
+        {controls === "arrows" ? (
           <ControlsArrows
-            handlePlayerMove={move => this.handlePlayerMoveByTouch(move)}
+            handlePlayerMove={(move) => this.handlePlayerMoveByTouch(move)}
           />
         ) : (
-          <ControlsKnob 
-            handlePlayerMove={move => this.handlePlayerMoveByTouch(move)}
+          <ControlsKnob
+            handlePlayerMove={(move) => this.handlePlayerMoveByTouch(move)}
           />
         )}
       </>

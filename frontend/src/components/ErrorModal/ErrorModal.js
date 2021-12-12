@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
-import { ReactComponent as CloseIcon } from '../../images/close.svg';
+import styled from "styled-components";
+import { ReactComponent as CloseIcon } from "../../images/close.svg";
 
 const ErrorModalBackground = styled.div`
   top: 0;
@@ -55,18 +54,18 @@ const ErrorModalBody = styled.div`
 `;
 
 const Error = ({ msg, closeModal }) => (
-  <ErrorModalBackground onClick={e => closeModal(e)}>
+  <ErrorModalBackground onClick={(e) => closeModal(e)}>
     <ErrorModal>
       <ErrorModalHeader data-element="modal">
         <ErrorHeader data-element="modal">Error</ErrorHeader>
-        <CloseModalBtn type="button" onClick={e => closeModal(e)}>
+        <CloseModalBtn type="button" onClick={(e) => closeModal(e)}>
           <CloseIcon
             style={{
-              fill: '#fefefe',
-              width: '15px',
-              height: '15px',
-              marginTop: '2px',
-              padding: '0'
+              fill: "#fefefe",
+              width: "15px",
+              height: "15px",
+              marginTop: "2px",
+              padding: "0",
             }}
           />
         </CloseModalBtn>

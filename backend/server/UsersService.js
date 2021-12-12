@@ -1,13 +1,21 @@
-const ServerBall = require('./ServerBall');
-const ServerPaddle = require('./ServerPaddle');
+const ServerBall = require("./ServerBall");
+const ServerPaddle = require("./ServerPaddle");
 
 class UsersService {
   constructor() {
     this.rooms = [];
+    this.singleRoom = {
+      ball: {},
+      playerOne: {},
+      playerTwo: {},
+    };
   }
 
   getRooms() {
     return this.rooms;
+  }
+  getSingleRoom() {
+    return this.singleRoom;
   }
 
   getGameElements(id) {
@@ -16,10 +24,17 @@ class UsersService {
         return {
           ball: this.rooms[i].ball,
           playerOnePaddle: this.rooms[i].playerOne.paddle,
-          playerTwoPaddle: this.rooms[i].playerTwo.paddle
+          playerTwoPaddle: this.rooms[i].playerTwo.paddle,
         };
       }
     }
+  }
+  getSingleGameElements() {
+    return {
+      ball: this.singleRoom.ball,
+      playerOnePaddle: this.singleRoom.playerOne.paddle,
+      playerTwoPaddle: this.singleRoom.playerTwo.paddle,
+    };
   }
 
   getElementsPos(id) {
@@ -31,17 +46,34 @@ class UsersService {
             y: this.rooms[i].playerOne.paddle.y,
             dx: this.rooms[i].playerOne.paddle.dx,
             dy: this.rooms[i].playerOne.paddle.dy,
-            score: this.rooms[i].playerOne.paddle.score
+            score: this.rooms[i].playerOne.paddle.score,
           },
           playerTwoPaddle: {
             y: this.rooms[i].playerTwo.paddle.y,
             dx: this.rooms[i].playerTwo.paddle.dx,
             dy: this.rooms[i].playerTwo.paddle.dy,
-            score: this.rooms[i].playerTwo.paddle.score
-          }
+            score: this.rooms[i].playerTwo.paddle.score,
+          },
         };
       }
     }
+  }
+  getSingleGameElementsPos() {
+    return {
+      ball: this.singleRoom.ball,
+      playerOnePaddle: {
+        y: this.singleRoom.playerOne.paddle.y,
+        dx: this.singleRoom.playerOne.paddle.dx,
+        dy: this.singleRoom.playerOne.paddle.dy,
+        score: this.singleRoom.playerOne.paddle.score,
+      },
+      playerTwoPaddle: {
+        y: this.singleRoom.playerTwo.paddle.y,
+        dx: this.singleRoom.playerTwo.paddle.dx,
+        dy: this.singleRoom.playerTwo.paddle.dy,
+        score: this.singleRoom.playerTwo.paddle.score,
+      },
+    };
   }
 
   createRoom(newRoom) {
@@ -65,6 +97,11 @@ class UsersService {
       }
     }
   }
+  createSingleGameElements(w, h) {
+    this.singleRoom.ball = new ServerBall(w / 2, h / 2, w, h);
+    this.singleRoom.playerOne.paddle = new ServerPaddle(30, h / 2, w, h);
+    this.singleRoom.playerTwo.paddle = new ServerPaddle(w - 50, h / 2, w, h);
+  }
 
   quitRoom(playerId) {
     for (let i = 0; i < this.rooms.length; i++) {
@@ -80,7 +117,7 @@ class UsersService {
           id: null,
           name: null,
           ready: false,
-          paddle: null
+          paddle: null,
         };
         this.rooms[i].ball = null;
       }

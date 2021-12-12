@@ -1,6 +1,5 @@
-import React from "react";
 import styled from "styled-components";
-
+import { StyledLink } from "../../App";
 const MainMenuWrapper = styled.div`
   background: #d7a6a6;
   padding: 5vh 8vw 7vh 8vw;
@@ -150,26 +149,22 @@ const ToggleControlsBtn = styled(Btn)`
   transition: background-color 250ms ease-in;
 `;
 
-const MainMenu = ({
+const SinglePlayerMenu = ({
   playerName,
   setPlayerName,
   goToLobby,
   setControls,
   controls,
+  getToSingleGame,
 }) => {
   const handleNameInput = (e) => {
     setPlayerName(e.target.value.trim());
   };
 
-  const handleToLobby = (e) => {
-    e.preventDefault();
-    goToLobby();
-  };
-
   return (
     <MainMenuWrapper>
       <PlayerWelcome>
-        <WelcomeMsg>Welcome to Multi-player Game</WelcomeMsg>
+        <WelcomeMsg>Welcome to Single Player Game</WelcomeMsg>
         <WelcomeMsg>Please Enter Your Name</WelcomeMsg>
         <PlayerNameInput
           type="text"
@@ -200,13 +195,16 @@ const MainMenu = ({
         <ToLobbyBtn
           disabled={playerName.length < 2 && true}
           type="submit"
-          onClick={(e) => handleToLobby(e)}
+          onClick={() => getToSingleGame()}
         >
           PLAY GAME
         </ToLobbyBtn>
+        <StyledLink to="/multi" exact>
+          MultiPlayer Game
+        </StyledLink>
       </PlayerWelcome>
     </MainMenuWrapper>
   );
 };
 
-export default MainMenu;
+export default SinglePlayerMenu;

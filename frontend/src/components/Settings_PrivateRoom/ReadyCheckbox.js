@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { ReactComponent as Checkmark } from '../../images/checkmark.svg';
+import { useState } from "react";
+import styled from "styled-components";
+import { ReactComponent as Checkmark } from "../../images/checkmark.svg";
 
 const RoomReadyLabel = styled.label`
   position: relative;
@@ -28,13 +28,13 @@ const RoomReadyCustomCheckbox = styled.div`
   align-items: center;
   height: 28px;
   width: 28px;
-  border: ${props =>
-    props.checked ? '3px solid #ed1c24' : '3px solid #ffed90'};
-  background-color: ${props => (props.checked ? '#ed1c24' : '#1e1e1e')};
+  border: ${(props) =>
+    props.checked ? "3px solid #ed1c24" : "3px solid #ffed90"};
+  background-color: ${(props) => (props.checked ? "#ed1c24" : "#1e1e1e")};
   transition: 1s;
 
   ${Checkmark} {
-    fill: ${props => (props.checked ? '#1e1e1e' : 'none')};
+    fill: ${(props) => (props.checked ? "#1e1e1e" : "none")};
     transition: 0.5s;
     height: 26px;
     width: 26px;
@@ -64,7 +64,7 @@ const ReadyCheckbox = ({ getToGame }) => {
   const handlePlayerDecision = () => {
     setChecked(!checked);
     getToGame(!checked);
-  }
+  };
 
   return (
     <RoomReadyLabel>
@@ -79,6 +79,6 @@ const ReadyCheckbox = ({ getToGame }) => {
       />
     </RoomReadyLabel>
   );
-}
+};
 
 export default ReadyCheckbox;

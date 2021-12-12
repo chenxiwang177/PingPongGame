@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
-import rotate from '../../images/rotate.gif';
+import styled from "styled-components";
+import rotate from "../../images/rotate.gif";
 
 const RatioErrorBox = styled.div`
   height: 50vh;
@@ -21,13 +20,13 @@ const RotateImg = styled.img`
   max-height: 200px;
 `;
 
-function RatioError() {
+const RatioError = () => {
   return (
     <RatioErrorBox>
       <RatioErrorMsg>To play switch to landscape mode.</RatioErrorMsg>
       <RotateImg src={rotate} alt="rotate" />
     </RatioErrorBox>
   );
-}
+};
 
 export default RatioError;

@@ -4,13 +4,13 @@ function ServerPaddle(x, y, w, h) {
   this.dx = 0;
   this.dy = 4;
   this.width = 16;
-  this.height = 50;
+  this.height = 150;
   this.canvas = {
     width: w,
-    height: h
+    height: h,
   };
   this.defaultVelocity = 4;
-  this.prevMove = '';
+  this.prevMove = "";
   this.score = 0;
 }
 
@@ -18,20 +18,23 @@ ServerPaddle.prototype = {
   update(pressedKey) {
     let moveY = Math.abs(this.dy);
     if (pressedKey === this.prevMove) {
-      moveY = moveY >= 3 * this.defaultVelocity ? 3 * this.defaultVelocity : moveY * 1.05;
+      moveY =
+        moveY >= 3 * this.defaultVelocity
+          ? 3 * this.defaultVelocity
+          : moveY * 1.25;
     }
     this.prevMove = pressedKey;
     switch (pressedKey) {
-      case 'ArrowDown':
+      case "ArrowDown":
         this.move(0, moveY);
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         this.move(0, -moveY);
         break;
-      case 'KnobDown':
+      case "KnobDown":
         this.move(0, moveY);
         break;
-      case 'KnobUp':
+      case "KnobUp":
         this.move(0, -moveY);
         break;
       default:
@@ -56,7 +59,10 @@ ServerPaddle.prototype = {
       this.y = this.canvas.height - this.height;
       this.dy = 0;
     }
-  }
+  },
+  aiMove(ballY) {
+    this.y += (ballY - (this.y + this.height / 2)) * 0.02;
+  },
 };
 
 module.exports = ServerPaddle;

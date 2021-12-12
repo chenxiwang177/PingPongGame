@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
-import ReadyCheckbox from './ReadyCheckbox';
+import styled from "styled-components";
+import ReadyCheckbox from "./ReadyCheckbox";
 
 const PrivateRoomWrapper = styled.div`
   width: 60%;
@@ -33,7 +32,7 @@ const Button = styled.button`
   text-align: center;
   padding: 5px 10px;
   border: none;
-  font-family: 'Concert One', cursive;
+  font-family: "Concert One", cursive;
   font-size: 1rem;
   color: #fefefe;
   text-transform: uppercase;
@@ -77,7 +76,7 @@ const PrivateRoom = ({
   createRoom,
   getToGame,
   leaveRoom,
-  isPlayerOne
+  isPlayerOne,
 }) => {
   return (
     <PrivateRoomWrapper>
@@ -96,7 +95,7 @@ const PrivateRoom = ({
           </RoomTxt>
           <RoomTxt>Waiting for the opponent...</RoomTxt>
           <DestroyRoomBtn type="button" onClick={() => leaveRoom()}>
-            forget this room
+            close this room
           </DestroyRoomBtn>
         </>
       )}
@@ -105,9 +104,9 @@ const PrivateRoom = ({
           <RoomTxt>
             Your opponent <RoomSpan>{opponentName}</RoomSpan> is conncected.
           </RoomTxt>
-          <ReadyCheckbox getToGame={isReady => getToGame(isReady)} />
+          <ReadyCheckbox getToGame={(isReady) => getToGame(isReady)} />
           <LeaveRoomBtn type="button" onClick={() => leaveRoom()}>
-            {isPlayerOne ? 'forget this room' : 'leave this room'}
+            {isPlayerOne ? "close this room" : "leave this room"}
           </LeaveRoomBtn>
         </>
       )}

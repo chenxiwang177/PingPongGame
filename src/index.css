@@ -1,0 +1,42 @@
+@font-face {
+  font-family: 'pong-score';
+  src: local('pong-score'), url(./fonts/pong-score.woff) format('woff');
+  src: local('pong-score'), url(./fonts/pong-score.woff2) format('woff2');
+}
+
+@import url('https://fonts.googleapis.com/css?family=Concert+One&display=swap');
+
+html {
+  font-size: 13px;
+  height: 100%;
+  background: #ffed90;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #ffed90;
+  font-family: 'Concert One', cursive;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100%;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}

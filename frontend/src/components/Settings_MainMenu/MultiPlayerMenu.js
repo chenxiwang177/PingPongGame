@@ -1,6 +1,5 @@
-import React from "react";
 import styled from "styled-components";
-
+import { StyledLink } from "../../App";
 const MainMenuWrapper = styled.div`
   background: #d7a6a6;
   padding: 5vh 8vw 7vh 8vw;
@@ -204,6 +203,9 @@ const MainMenu = ({
         >
           PLAY GAME
         </ToLobbyBtn>
+        <StyledLink to="/single" exact>
+          SinglePlayer Game
+        </StyledLink>
       </PlayerWelcome>
     </MainMenuWrapper>
   );

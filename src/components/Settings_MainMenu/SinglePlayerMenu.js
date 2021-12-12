@@ -150,12 +150,13 @@ const ToggleControlsBtn = styled(Btn)`
   transition: background-color 250ms ease-in;
 `;
 
-const MainMenu = ({
+const SinglePlayerMenu = ({
   playerName,
   setPlayerName,
   goToLobby,
   setControls,
   controls,
+  getToSingleGame,
 }) => {
   const handleNameInput = (e) => {
     setPlayerName(e.target.value.trim());
@@ -169,14 +170,14 @@ const MainMenu = ({
   return (
     <MainMenuWrapper>
       <PlayerWelcome>
-        <WelcomeMsg>Welcome to Multi-player Game</WelcomeMsg>
+        <WelcomeMsg>Welcome to Single Player Game</WelcomeMsg>
         <WelcomeMsg>Please Enter Your Name</WelcomeMsg>
         <PlayerNameInput
           type="text"
           autoFocus
           onChange={(e) => handleNameInput(e)}
           value={playerName}
-          placeholder="PLAYER NAME"
+          placeholder="YOUR NAME"
         />
         <ControlsMsg>{`Choose controls`}</ControlsMsg>
         <ControlsWrapper>
@@ -200,7 +201,7 @@ const MainMenu = ({
         <ToLobbyBtn
           disabled={playerName.length < 2 && true}
           type="submit"
-          onClick={(e) => handleToLobby(e)}
+          onClick={() => getToSingleGame()}
         >
           PLAY GAME
         </ToLobbyBtn>
@@ -209,4 +210,4 @@ const MainMenu = ({
   );
 };
 
-export default MainMenu;
+export default SinglePlayerMenu;
