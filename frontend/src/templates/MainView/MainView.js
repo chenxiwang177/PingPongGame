@@ -117,7 +117,6 @@ const MainView = (props) => {
       {gameOn && (
         <GameAreaWithSocket
           roomId={roomId}
-          controls={controls}
           isPlayerOne={isPlayerOne}
           leaveGame={() => handleLeavingRoom()}
         />

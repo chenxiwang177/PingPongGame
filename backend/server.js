@@ -2,14 +2,24 @@ const express = require("express");
 const app = express();
 const socket = require("socket.io");
 const cors = require("cors");
-
+const mongoose = require("mongoose");
 const UsersService = require("./server/UsersService");
-
+const gameResultModel = require("./server/GameResult");
 const usersService = new UsersService();
 
 app.use(express());
 const port = 8000;
 app.use(cors());
+const mongoDatabase = "mongodb://localhost:27017/pingpong";
+mongoose.Promise = global.Promise;
+mongoose.connect(mongoDatabase, { useNewUrlParser: true }).then(
+  () => {
+    console.log("Database is connected");
+  },
+  (err) => {
+    console.log("There is problem while connecting database " + err);
+  }
+);
 
 var server = app.listen(
   port,
@@ -157,8 +167,34 @@ io.on("connection", (socket) => {
         if (rooms[i].id === roomName) {
           if (isPlayerOneWon) {
             rooms[i].playerOne.paddle.updateScore();
+            if (rooms[i].playerOne.paddle.score >= 4) {
+              new gameResultModel({
+                roomName: roomName,
+                playerOne: rooms[i].playerOne.name,
+                playerTwo: rooms[i].playerTwo.name,
+                playerOneScore: 4,
+                playerTwoScore: rooms[i].playerTwo.paddle.score,
+              })
+                .save()
+                .then(() =>
+                  console.log("game finished and save result successfully")
+                );
+            }
           } else {
             rooms[i].playerTwo.paddle.updateScore();
+            if (rooms[i].playerTwo.paddle.score >= 4) {
+              new gameResultModel({
+                roomName: roomName,
+                playerOne: rooms[i].playerOne.name,
+                playerTwo: rooms[i].playerTwo.name,
+                playerOneScore: rooms[i].playerOne.paddle.score,
+                playerTwoScore: 4,
+              })
+                .save()
+                .then(() =>
+                  console.log("game finished and save result successfully")
+                );
+            }
           }
           io.in(`room-${roomName}`).emit("addAudio", "score");
         }

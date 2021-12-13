@@ -1,6 +1,9 @@
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
+import { ReactComponent as BackIcon } from "../../images/back.svg";
 import { StyledLink } from "../../App";
 const MainMenuWrapper = styled.div`
+  position: relative;
   background: #d7a6a6;
   padding: 5vh 8vw 7vh 8vw;
   color: #1a1a1a;
@@ -115,47 +118,12 @@ const ToLobbyBtn = styled(Btn)`
     margin: 30px 0 10px 0;
   }
 `;
-
-const ControlsMsg = styled.p`
-  width: 100%;
-  color: #080808;
-  font-size: 0.9rem;
-  line-height: 1.8;
-  font-weight: 300;
-  text-align: center;
-  text-transform: uppercase;
-  margin: 0 0 3px 0;
-
-  @media (min-width: 1024px) {
-    font-size: 1.2rem;
-    margin: 0 0 10px 0;
-  }
+const BackToMenu = styled(NavLink)`
+  position: absolute;
+  top: 20px;
+  left: 30px;
 `;
-
-const ControlsWrapper = styled.div`
-  width: 100%;
-  margin: 0 0 10px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const ToggleControlsBtn = styled(Btn)`
-  width: 45%;
-  margin: 0;
-  text-transform: uppercase;
-  background-color: ${(props) => (props.isChosen ? "#1f66e5" : "#1e1e1e")};
-  border: ${(props) => (props.isChosen ? "none" : "3px solid #1f66e5")};
-  transition: background-color 250ms ease-in;
-`;
-
-const MainMenu = ({
-  playerName,
-  setPlayerName,
-  goToLobby,
-  setControls,
-  controls,
-}) => {
+const MainMenu = ({ playerName, setPlayerName, goToLobby }) => {
   const handleNameInput = (e) => {
     setPlayerName(e.target.value.trim());
   };
@@ -167,6 +135,9 @@ const MainMenu = ({
 
   return (
     <MainMenuWrapper>
+      <BackToMenu to="/">
+        <BackIcon />
+      </BackToMenu>
       <PlayerWelcome>
         <WelcomeMsg>Welcome to Multi-player Game</WelcomeMsg>
         <WelcomeMsg>Please Enter Your Name</WelcomeMsg>
@@ -177,25 +148,7 @@ const MainMenu = ({
           value={playerName}
           placeholder="YOUR NAME"
         />
-        <ControlsMsg>{`Choose controls`}</ControlsMsg>
-        <ControlsWrapper>
-          <ToggleControlsBtn
-            value="arrows"
-            type="button"
-            isChosen={controls === "arrows"}
-            onClick={(e) => setControls(e.target.value)}
-          >
-            Arrows
-          </ToggleControlsBtn>
-          <ToggleControlsBtn
-            value="knob"
-            type="button"
-            isChosen={controls === "knob"}
-            onClick={(e) => setControls(e.target.value)}
-          >
-            Knob
-          </ToggleControlsBtn>
-        </ControlsWrapper>
+
         <ToLobbyBtn
           disabled={playerName.length < 2 && true}
           type="submit"

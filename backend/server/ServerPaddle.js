@@ -61,7 +61,7 @@ ServerPaddle.prototype = {
     }
   },
   aiMove(ballY) {
-    this.y += (ballY - (this.y + this.height / 2)) * 0.02;
+    this.y += (ballY - (this.y + this.height / 2)) * 0.04;
   },
 };
 

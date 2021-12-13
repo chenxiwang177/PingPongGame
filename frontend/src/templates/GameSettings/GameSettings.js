@@ -119,8 +119,6 @@ const GameSettings = (props) => {
     isPlayerOne,
     inLobby,
     goToLobby,
-    setControls,
-    controls,
   } = props;
   useEffect(() => {
     pong.emit("getAllRooms");
@@ -179,8 +177,6 @@ const GameSettings = (props) => {
           playerName={playerName}
           setPlayerName={setPlayerName}
           goToLobby={() => goToLobby()}
-          setControls={(c) => setControls(c)}
-          controls={controls}
           getToSingleGame={handleSingleGameGetToGame}
         />
       )}
@@ -189,8 +185,6 @@ const GameSettings = (props) => {
           playerName={playerName}
           setPlayerName={setPlayerName}
           goToLobby={() => goToLobby()}
-          setControls={(c) => setControls(c)}
-          controls={controls}
         />
       )}
       {inLobby && location === "/multi" && (

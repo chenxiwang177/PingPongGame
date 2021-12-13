@@ -6,7 +6,6 @@ import Paddle from "../../components/Game_Paddle/Paddle";
 import Score from "../../components/Game_Score/Score";
 import GameInterface from "../../components/Game_Interface/GameInterface";
 import ControlsArrows from "../../components/Controls_Arrows/ControlsArrows";
-import ControlsKnob from "../../components/Controls_Knob/ControlsKnob";
 import { ReactComponent as Frame } from "../../images/pong-frame.svg";
 import ScoreAudio from "../../audio/score.mp3";
 import BorderAudio from "../../audio/border.mp3";
@@ -180,18 +179,18 @@ class GameArea extends Component {
     const { ball, playerOnePaddle, playerTwoPaddle } = elements;
     const { isPlayerOne } = this.props;
     if (isPlayerOne) {
-      if (playerOnePaddle.score >= 4 && this.gameFinished) {
-        alert("you win");
-        this.leaveGame();
-
-        this.gameFinished = false;
+      if (this.gameFinished) {
+        if (playerOnePaddle.score >= 4) {
+          alert("you win");
+          this.leaveGame();
+          this.gameFinished = false;
+        }
+        if (playerTwoPaddle.score >= 4) {
+          alert("you lose");
+          this.leaveGame();
+          this.gameFinished = false;
+        }
       }
-      if (playerTwoPaddle.score >= 4 && this.gameFinished) {
-        alert("you lose");
-        this.leaveGame();
-        this.gameFinished = false;
-      }
-
       this.clientPaddle?.sync(
         playerOnePaddle.y,
         playerOnePaddle.dx,
@@ -205,15 +204,17 @@ class GameArea extends Component {
       this.clientScore?.sync(playerOnePaddle.score);
       this.enemyScore?.sync(playerTwoPaddle.score);
     } else {
-      if (playerOnePaddle.score >= 4 && this.gameFinished) {
-        alert("you lose");
-        this.leaveGame();
-        this.gameFinished = false;
-      }
-      if (playerTwoPaddle.score >= 4 && this.gameFinished) {
-        alert("you win");
-        this.leaveGame();
-        this.gameFinished = false;
+      if (this.gameFinished) {
+        if (playerOnePaddle.score >= 4) {
+          alert("you lose");
+          this.leaveGame();
+          this.gameFinished = false;
+        }
+        if (playerTwoPaddle.score >= 4) {
+          alert("you win");
+          this.leaveGame();
+          this.gameFinished = false;
+        }
       }
 
       this.clientPaddle?.sync(
@@ -245,7 +246,6 @@ class GameArea extends Component {
 
   render() {
     const { soundOn } = this.state;
-    const { controls } = this.props;
     return (
       <>
         <GameContainer id="gameContainer">
@@ -275,15 +275,10 @@ class GameArea extends Component {
           type="audio/mpeg"
           ref={this.paddleSound}
         />
-        {controls === "arrows" ? (
-          <ControlsArrows
-            handlePlayerMove={(move) => this.handlePlayerMoveByTouch(move)}
-          />
-        ) : (
-          <ControlsKnob
-            handlePlayerMove={(move) => this.handlePlayerMoveByTouch(move)}
-          />
-        )}
+
+        <ControlsArrows
+          handlePlayerMove={(move) => this.handlePlayerMoveByTouch(move)}
+        />
       </>
     );
   }

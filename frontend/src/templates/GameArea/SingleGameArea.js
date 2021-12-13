@@ -6,7 +6,6 @@ import Paddle from "../../components/Game_Paddle/Paddle";
 import Score from "../../components/Game_Score/Score";
 import GameInterface from "../../components/Game_Interface/GameInterface";
 import ControlsArrows from "../../components/Controls_Arrows/ControlsArrows";
-import ControlsKnob from "../../components/Controls_Knob/ControlsKnob";
 import { ReactComponent as Frame } from "../../images/pong-frame.svg";
 import ScoreAudio from "../../audio/score.mp3";
 import BorderAudio from "../../audio/border.mp3";
@@ -249,7 +248,6 @@ class SingleGameArea extends Component {
 
   render() {
     const { soundOn } = this.state;
-    const { controls } = this.props;
     return (
       <>
         <GameContainer id="gameContainer">
@@ -279,15 +277,10 @@ class SingleGameArea extends Component {
           type="audio/mpeg"
           ref={this.paddleSound}
         />
-        {controls === "arrows" ? (
-          <ControlsArrows
-            handlePlayerMove={(move) => this.handlePlayerMoveByTouch(move)}
-          />
-        ) : (
-          <ControlsKnob
-            handlePlayerMove={(move) => this.handlePlayerMoveByTouch(move)}
-          />
-        )}
+
+        <ControlsArrows
+          handlePlayerMove={(move) => this.handlePlayerMoveByTouch(move)}
+        />
       </>
     );
   }
