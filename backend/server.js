@@ -187,7 +187,7 @@ io.on("connection", (socket) => {
           } else {
             rooms[i].playerTwo.paddle.updateScore();
             if (rooms[i].playerTwo.paddle.score >= 4) {
-              new gameResultModel({
+              new multiGameResultModel({
                 roomName: roomName,
                 playerOne: rooms[i].playerOne.name,
                 playerTwo: rooms[i].playerTwo.name,
