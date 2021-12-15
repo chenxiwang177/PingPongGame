@@ -11,8 +11,6 @@ const Header = styled.header`
   top: 0;
   right: 0;
   left: 0;
-  height: 5vh;
-  margin-top: 3vh;
 `;
 
 const MainView = (props) => {
