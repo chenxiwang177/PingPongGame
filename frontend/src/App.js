@@ -118,9 +118,7 @@ const Home = () => {
     <Wrap>
       <Button onClick={toggleShow}>How to play?</Button>
       <NavBar>
-        <StyledLink to="/multi" exact>
-          MultiPlayer Game
-        </StyledLink>
+        <StyledLink to="/multi">MultiPlayer Game</StyledLink>
         <StyledLink to="/single">SinglePlayer Game</StyledLink>
       </NavBar>
       <Modal>
@@ -144,7 +142,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" exact element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/multi" element={<Game />} />
         <Route path="/single" element={<Game />} />
       </Routes>

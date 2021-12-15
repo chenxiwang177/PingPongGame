@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { ReactComponent as CloseIcon } from "../../images/close.svg";
-import { ReactComponent as SoundOnIcon } from "../../images/soundOn.svg";
-import { ReactComponent as SoundOffIcon } from "../../images/soundOff.svg";
+import CloseIcon from "../../images/close.svg";
+import SoundOnIcon from "../../images/soundOn.svg";
+import SoundOffIcon from "../../images/soundOff.svg";
 
 const GameInterfaceWrapper = styled.div`
   position: absolute;
@@ -49,13 +49,21 @@ const GameInterface = ({ leaveGame, audioOn, toggleAudio }) => (
   <GameInterfaceWrapper>
     <GameInterfaceBtn>
       {audioOn ? (
-        <SoundOnIcon onClick={() => toggleAudio(false)} />
+        <img
+          src={SoundOnIcon}
+          onClick={() => toggleAudio(false)}
+          alt="soundon"
+        />
       ) : (
-        <SoundOffIcon onClick={() => toggleAudio(true)} />
+        <image
+          src={SoundOffIcon}
+          onClick={() => toggleAudio(true)}
+          alt="soundoff"
+        />
       )}
     </GameInterfaceBtn>
     <GameInterfaceBtn>
-      <CloseIcon onClick={() => leaveGame()} />
+      <img src={CloseIcon} onClick={() => leaveGame()} alt="close" />
     </GameInterfaceBtn>
   </GameInterfaceWrapper>
 );

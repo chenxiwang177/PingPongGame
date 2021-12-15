@@ -120,13 +120,14 @@ const GameSettings = (props) => {
     inLobby,
     goToLobby,
   } = props;
+
   useEffect(() => {
     pong.emit("getAllRooms");
     pong.on("sendRoomsList", (data) => setRooms(data));
     pong.on("goToGameRoom", (data) => handleGoToGameRoom(data));
     pong.on("opponentInLobby", (data) => handleOpponentInLobby(data));
     pong.on("gameReady", () => handleGameStart());
-  }, []);
+  });
 
   const handleCreateRoom = () => {
     const roomId = randomWords();
@@ -156,7 +157,6 @@ const GameSettings = (props) => {
   };
 
   const handleGetToGame = (isReady) => {
-    console.log(isReady);
     pong.emit("getToGame", {
       roomName: roomId,
       decision: isReady,

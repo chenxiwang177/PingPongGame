@@ -29,7 +29,7 @@ const MainView = (props) => {
     setTimeout(() => setLoading(false), 1500);
     pong.on("errRooms", ({ msg }) => handleError(msg));
     pong.on("playerLeft", (msg) => onOtherPlayerLeft(msg));
-  }, []);
+  });
 
   const handleSettingRoomId = (roomId) => {
     setRoomId(roomId);

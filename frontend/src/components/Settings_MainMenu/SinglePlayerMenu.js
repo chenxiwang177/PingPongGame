@@ -151,9 +151,7 @@ const SinglePlayerMenu = ({ playerName, setPlayerName, getToSingleGame }) => {
         >
           PLAY GAME
         </ToLobbyBtn>
-        <StyledLink to="/multi" exact>
-          MultiPlayer Game
-        </StyledLink>
+        <StyledLink to="/multi">MultiPlayer Game</StyledLink>
       </PlayerWelcome>
     </MainMenuWrapper>
   );
