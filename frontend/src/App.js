@@ -18,6 +18,9 @@ export const StyledLink = styled(NavLink)`
     border-color: blue;
     transform: scale(1.05);
   }
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
 `;
 
 const NavBar = styled.main`

@@ -16,7 +16,7 @@ let SingleGameResultGameResult = new Schema(
     time: { type: Date, required: true, default: Date.now },
   },
   {
-    collection: "singlegameresult",
+    collection: "SingleGameResultGameResult",
   }
 );
 

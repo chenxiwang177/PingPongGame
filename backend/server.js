@@ -4,8 +4,8 @@ const socket = require("socket.io");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const UsersService = require("./server/UsersService");
-const gameResultModel = require("./server/GameResult");
-const singleGameResultModel = require("./server/SingleGameResult");
+const multiGameResultModel = require("./model/MuliGameResult");
+const singleGameResultModel = require("./model/SingleGameResult");
 const usersService = new UsersService();
 
 app.use(express());
@@ -172,7 +172,7 @@ io.on("connection", (socket) => {
           if (isPlayerOneWon) {
             rooms[i].playerOne.paddle.updateScore();
             if (rooms[i].playerOne.paddle.score >= 4) {
-              new gameResultModel({
+              new multiGameResultModel({
                 roomName: roomName,
                 playerOne: rooms[i].playerOne.name,
                 playerTwo: rooms[i].playerTwo.name,

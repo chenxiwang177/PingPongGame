@@ -86,7 +86,7 @@ const MainView = (props) => {
   return (
     <>
       {loading && <LoadingScreen />}
-      {!loading && !inLobby && (
+      {!loading && !inLobby && !gameOn && (
         <Header>
           <Logo height="150px" />{" "}
         </Header>

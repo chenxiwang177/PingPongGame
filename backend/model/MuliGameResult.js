@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // List of columns for Employee schema
-let GameResult = new Schema(
+let MuliGameResult = new Schema(
   {
     roomName: {
       type: String,
@@ -22,8 +22,8 @@ let GameResult = new Schema(
     time: { type: Date, required: true, default: Date.now },
   },
   {
-    collection: "gameresult",
+    collection: "MuliGameResult",
   }
 );
 
-module.exports = mongoose.model("GameResult", GameResult);
+module.exports = mongoose.model("MuliGameResult", MuliGameResult);
