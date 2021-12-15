@@ -6,7 +6,7 @@ function ServerBall(x, y, w, h) {
   this.size = 14;
   this.canvas = {
     width: w,
-    height: h
+    height: h,
   };
 }
 
@@ -56,13 +56,13 @@ ServerBall.prototype = {
       }
     } else if (
       xTop < enemyPaddle.x - enemyPaddle.width &&
-      xBottom > enemyPaddle.x &&
+      xBottom > enemyPaddle.x - enemyPaddle.width &&
       yTop < enemyPaddle.y + enemyPaddle.height &&
       yBottom > enemyPaddle.y
     ) {
       // hit enemys paddle
       this.dx = -2;
-      this.dy = enemyPaddle.dy / 2;
+      this.dy = -enemyPaddle.dy / 2;
       this.x += this.dx;
       addPaddleBounce();
     }
@@ -81,7 +81,7 @@ ServerBall.prototype = {
     } else {
       this.dy = randomThrowAngle;
     }
-  }
+  },
 };
 
 module.exports = ServerBall;

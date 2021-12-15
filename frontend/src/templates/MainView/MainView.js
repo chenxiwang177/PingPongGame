@@ -23,7 +23,6 @@ const MainView = (props) => {
   const [gameOn, setGameOn] = useState(false);
   const [isPlayerOne, setIsPlayerOne] = useState(false);
   const [error, setError] = useState(false);
-
   const { pong } = props;
 
   useEffect(() => {
@@ -84,11 +83,10 @@ const MainView = (props) => {
     handleError(msg);
     pong.emit("getAllRooms");
   };
-
   return (
     <>
       {loading && <LoadingScreen />}
-      {!loading && (
+      {!loading && !inLobby && (
         <Header>
           <Logo height="150px" />{" "}
         </Header>

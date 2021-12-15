@@ -80,6 +80,10 @@ class UsersService {
     this.rooms = [newRoom, ...this.rooms];
   }
 
+  createSingleRoom(name) {
+    this.singleRoom.playerOne.name = name;
+  }
+
   joinRoom({ id, playerTwo }) {
     for (let i = 0; i < this.rooms.length; i++) {
       if (this.rooms[i].id === id) {

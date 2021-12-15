@@ -12,13 +12,7 @@ function Ball(x, y, dx, dy, size, isPlayerOne, canvas, ctx) {
 Ball.prototype = {
   draw() {
     this.ctx.beginPath();
-    this.ctx.arc(
-      this.x + this.size / 2,
-      this.y - this.size / 2,
-      this.size / 2,
-      0,
-      2 * Math.PI
-    );
+    this.ctx.arc(this.x, this.y, this.size / 2, 0, 2 * Math.PI);
     this.ctx.fillStyle = "#ffffff";
     this.ctx.fill();
   },

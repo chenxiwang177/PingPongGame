@@ -2,28 +2,25 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // List of columns for Employee schema
-let GameResult = new Schema(
+let SingleGameResultGameResult = new Schema(
   {
-    roomName: {
+    UserName: {
       type: String,
     },
-    playerOne: {
-      type: String,
-    },
-    playerTwo: {
-      type: String,
-    },
-    playerOneScore: {
+    UserScore: {
       type: Number,
     },
-    playerTwoScore: {
+    BotScore: {
       type: Number,
     },
     time: { type: Date, required: true, default: Date.now },
   },
   {
-    collection: "gameresult",
+    collection: "singlegameresult",
   }
 );
 
-module.exports = mongoose.model("GameResult", GameResult);
+module.exports = mongoose.model(
+  "SingleGameResultGameResult",
+  SingleGameResultGameResult
+);

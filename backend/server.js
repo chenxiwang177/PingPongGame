@@ -5,6 +5,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const UsersService = require("./server/UsersService");
 const gameResultModel = require("./server/GameResult");
+const singleGameResultModel = require("./server/SingleGameResult");
 const usersService = new UsersService();
 
 app.use(express());
@@ -48,6 +49,9 @@ io.on("connection", (socket) => {
       opponentName: false,
       isPlayerOne: true,
     });
+  });
+  socket.on("createSingleRoom", ({ userName }) => {
+    usersService.createSingleRoom(userName);
   });
 
   socket.on("leaveRoom", () => {
@@ -226,6 +230,20 @@ io.on("connection", (socket) => {
         singleRoom.playerOne.paddle.updateScore();
       } else {
         singleRoom.playerTwo.paddle.updateScore();
+      }
+      if (
+        singleRoom.playerOne.paddle.score >= 4 ||
+        singleRoom.playerTwo.paddle.score >= 4
+      ) {
+        new singleGameResultModel({
+          UserName: singleRoom.playerOne.name,
+          UserScore: singleRoom.playerTwo.paddle.score,
+          BotScore: singleRoom.playerOne.paddle.score,
+        })
+          .save()
+          .then(() =>
+            console.log("single game finished and save result successfully")
+          );
       }
       socket.emit("addAudio", "score");
     };

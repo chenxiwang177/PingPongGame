@@ -163,6 +163,7 @@ const GameSettings = (props) => {
     });
   };
   const handleSingleGameGetToGame = () => {
+    pong.emit("createSingleRoom", { userName: playerName });
     setGame();
   };
 
