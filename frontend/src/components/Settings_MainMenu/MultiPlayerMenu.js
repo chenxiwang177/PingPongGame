@@ -156,9 +156,7 @@ const MainMenu = ({ playerName, setPlayerName, goToLobby }) => {
         >
           PLAY GAME
         </ToLobbyBtn>
-        <StyledLink to="/single" exact>
-          SinglePlayer Game
-        </StyledLink>
+        <StyledLink to="/single">SinglePlayer Game</StyledLink>
       </PlayerWelcome>
     </MainMenuWrapper>
   );

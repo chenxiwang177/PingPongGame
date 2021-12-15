@@ -120,7 +120,6 @@ class SingleGameArea extends Component {
   };
 
   getGameElements = ({ ball }) => {
-    console.log(ball);
     const { x, y, dx, dy, size, canvas } = ball;
     const { width, height } = canvas;
     const { isPlayerOne } = this.props;
